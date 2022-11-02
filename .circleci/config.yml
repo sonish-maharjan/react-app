@@ -1,26 +1,27 @@
 version: 2
 general:
   branches:
-    only:
-      - master
+	only:
+  	- master
 jobs:
   build:
-    docker:
-      - image: circleci/openjdk:8-jdk
-    steps:
-      - checkout
-      - run:
-          name: Deploy
-          command: |
-            ssh -o StrictHostKeyChecking=no ubuntu@34.236.254.77 \
-            "echo Start deploy && \
-            cd ~/react-app/sonish-react-app && \
-            git pull origin master && \
-            cd .. && \
-            sudo docker compose up --build -d && \
-            echo Deploy end"
+	docker:
+  	- image: circleci/openjdk:8-jdk
+	steps:
+  	- setup_remote_docker:
+      	version: 20.10.14
+  	- checkout
+  	- run:
+      	name: Deploy
+      	command: |
+        	sudo apt update -y
+        	sudo apt install awscli -y
+        	echo Start deploy for S3 Cloud Front
+          yarn build
+          aws s3 sync build s3://sonish-bucket  
+        	echo Deploy end
 workflows:
   version: 2
   deploy_ec2:
-    jobs:
-      - build
+	jobs:
+  	- build
