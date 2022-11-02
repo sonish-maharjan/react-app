@@ -21,7 +21,7 @@ jobs:
             docker build -t sonish-react-js:success .
             docker tag sonish-react-js:success public.ecr.aws/o2e6u6n6/msonish-react:success
             docker push public.ecr.aws/o2e6u6n6/msonish-react:success
-            aws ecs update-service --cluster work-sonish-cluster --service sonish-ecs-cluster --force-new-deployment
+            aws ecs update-service --cluster work-sonish-cluster --service msonsish-last-service --force-new-deployment
             echo Deploy end
 workflows:
   version: 2
